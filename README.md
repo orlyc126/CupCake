@@ -5,17 +5,6 @@ This app contains an order flow for cupcakes with options for quantity, flavor, 
 The order details get displayed on an order summary screen and can be shared to another app to
 send the order.
 
+We learn in this unit how to navigate to different screens.
 
-Pre-requisites
---------------
-* Experience with Kotlin syntax.
-* How to create and run a project in Android Studio.
-* How to create composable functions 
-
-
-Getting Started
----------------
-1. Install Android Studio, if you don't already have it.
-2. Download the sample.
-3. Import the sample into Android Studio.
-4. Build and run the sample.
+# CupCake
