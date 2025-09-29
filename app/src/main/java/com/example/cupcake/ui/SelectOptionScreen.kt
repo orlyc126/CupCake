@@ -64,7 +64,7 @@ fun SelectOptionScreen(
             options.forEach { item ->
                 Row(
                     modifier = Modifier.selectable(
-                        selected = selectedValue == item,
+                        selected = (selectedValue == item),
                         onClick = {
                             selectedValue = item
                             onSelectionChanged(item)
@@ -73,7 +73,7 @@ fun SelectOptionScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     RadioButton(
-                        selected = selectedValue == item,
+                        selected = (selectedValue == item),
                         onClick = {
                             selectedValue = item
                             onSelectionChanged(item)
