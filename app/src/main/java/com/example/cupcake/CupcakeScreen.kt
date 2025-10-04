@@ -43,6 +43,8 @@ import androidx.navigation.compose.composable
 import com.example.cupcake.data.DataSource
 import com.example.cupcake.ui.SelectOptionScreen
 import com.example.cupcake.ui.StartOrderScreen
+import com.example.cupcake.ui.OrderSummaryScreen
+
 
 /**
  * Composable that displays the topBar and displays back button if back navigation is possible.
@@ -114,6 +116,12 @@ fun CupcakeApp(
                     subtotal = uiState.price,
                     options = DataSource.flavors.map { id -> context.resources.getString(id) },
                     onSelectionChanged = { viewModel.setFlavor(it) },
+                    modifier = Modifier.fillMaxHeight()
+                )
+            }
+            composable(route = CupcakeScreen.Summary.name) {
+                OrderSummaryScreen(
+                    orderUiState = uiState,
                     modifier = Modifier.fillMaxHeight()
                 )
             }
