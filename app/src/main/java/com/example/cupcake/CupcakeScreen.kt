@@ -105,6 +105,7 @@ fun CupcakeApp(
             composable(route = CupcakeScreen.Start.name){
                 StartOrderScreen(
                     quantityOptions = DataSource.quantityOptions,
+                    onNextButtonClicked = {},
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(dimensionResource(R.dimen.padding_medium))
@@ -115,13 +116,16 @@ fun CupcakeApp(
                 SelectOptionScreen(
                     subtotal = uiState.price,
                     options = DataSource.flavors.map { id -> stringResource(id) },
-                    onSelectionChanged = { viewModel.setFlavor(it) },
+                    onSelectionChanged = { viewModel::setFlavor },
                     modifier = Modifier.fillMaxHeight()
                 )
             }
             composable(route = CupcakeScreen.Summary.name) {
                 OrderSummaryScreen(
                     orderUiState = uiState,
+                    onCancelButtonClicked = {},
+                    onSendButtonClicked = { subject: String, summary: String -> },
+                     // TODO: handle the click
                     modifier = Modifier.fillMaxHeight()
                 )
             }
