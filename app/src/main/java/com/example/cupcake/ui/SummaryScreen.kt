@@ -77,44 +77,97 @@ fun OrderSummaryScreen(
         // Summary line 3: display selected pickup date
         Pair(stringResource(R.string.pickup_date), orderUiState.date)
     )
+    OrderSummaryContent(
+        orderUiState = orderUiState,
+        items = items,
+        newOrder = newOrder,
+        orderSummary = orderSummary,
+        onSendButtonClicked = onSendButtonClicked,
+        onCancelButtonClicked = onCancelButtonClicked,
+        modifier = modifier.fillMaxHeight()
+    )
+}
 
+@Composable
+fun OrderSummaryContent(
+    orderUiState: OrderUiState,
+    items: List<Pair<String, String>>,
+    newOrder: String,
+    orderSummary: String,
+    onSendButtonClicked: (String, String) -> Unit,
+    onCancelButtonClicked: () -> Unit,
+    modifier: Modifier = Modifier
+){
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
+        OrderSummaryDetails(
+            items = items,
+            subtotal = orderUiState.price
+        )
+        OrderSummaryButtons(
+            newOrder = newOrder,
+            orderSummary = orderSummary,
+            onSendButtonClicked = onSendButtonClicked,
+            onCancelButtonClicked = onCancelButtonClicked,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(R.dimen.padding_medium))
+        )
+    }
+}
+
+@Composable
+fun OrderSummaryDetails(
+    items: List<Pair<String, String>>,
+    subtotal: String,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium)),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
+    ) {
+        items.forEach { item ->
+            Text(item.first.uppercase())
+            Text(text = item.second, fontWeight = FontWeight.Bold)
+            Divider(thickness = dimensionResource(R.dimen.thickness_divider))
+        }
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
+        FormattedPriceLabel(
+            subtotal = subtotal,
+            modifier = Modifier.align(Alignment.End)
+        )
+    }
+}
+
+//////////////////////////////////////
+@Composable
+fun OrderSummaryButtons(
+    newOrder: String,
+    orderSummary: String,
+    onSendButtonClicked: (String, String) -> Unit,
+    onCancelButtonClicked: () -> Unit,
+    modifier: Modifier = Modifier
+)
+{
+    Row(
+        modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
+    ) {
         Column(
-            modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium)),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
         ) {
-            items.forEach { item ->
-                Text(item.first.uppercase())
-                Text(text = item.second, fontWeight = FontWeight.Bold)
-                Divider(thickness = dimensionResource(R.dimen.thickness_divider))
-            }
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
-            FormattedPriceLabel(
-                subtotal = orderUiState.price,
-                modifier = Modifier.align(Alignment.End)
-            )
-        }
-        Row(
-            modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
-        ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = { onSendButtonClicked(newOrder, orderSummary) }
             ) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { onSendButtonClicked(newOrder, orderSummary) }
-                ) {
-                    Text(stringResource(R.string.send))
-                }
-                OutlinedButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = onCancelButtonClicked
-                ) {
-                    Text(stringResource(R.string.cancel))
-                }
+                Text(stringResource(R.string.send))
+            }
+            OutlinedButton(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onCancelButtonClicked
+            ) {
+                Text(stringResource(R.string.cancel))
             }
         }
     }
