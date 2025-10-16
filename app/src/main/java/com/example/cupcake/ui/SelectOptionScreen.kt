@@ -48,41 +48,85 @@ import com.example.cupcake.ui.theme.CupcakeTheme
  * [onNextButtonClicked] lambda that triggers the navigation to next screen
  */
 @Composable
-fun SelectOptionScreen(
+fun ActionButtonsRow(
+    onCancelButtonClicked: () -> Unit,
+    onNextButtonClicked: () -> Unit,
+    isNextEnabled: Boolean,
+    selectedValue: String,
+    modifier: Modifier = Modifier
+){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(R.dimen.padding_medium)),
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
+        verticalAlignment = Alignment.Bottom
+    ) {
+        OutlinedButton(
+            modifier = Modifier.weight(1f),
+            onClick = onCancelButtonClicked
+        ) {
+            Text(stringResource(R.string.cancel))
+        }
+        Button(
+            modifier = Modifier.weight(1f),
+            // the button is enabled when the user makes a selection
+            enabled = selectedValue.isNotEmpty(),
+            onClick = onNextButtonClicked
+        ) {
+            Text(stringResource(R.string.next))
+        }
+    }
+}
+
+@Composable
+fun SelectableOptionRow(
+    item: String,
+    selectedValue: String,
+    onSelectionChanged: (String) -> Unit,
+    modifier: Modifier = Modifier
+){
+    Row(
+        modifier = Modifier.selectable(
+            selected = (selectedValue == item),
+            onClick = {
+                onSelectionChanged(item)
+            }
+        ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(
+            selected = (selectedValue == item),
+            onClick = {
+                onSelectionChanged(item)
+            }
+        )
+        Text(item)
+    }
+}
+
+
+@Composable
+fun SelectOptionContent(
     subtotal: String,
     options: List<String>,
-    onSelectionChanged: (String) -> Unit = {},
-    onCancelButtonClicked: () -> Unit = {},
-    onNextButtonClicked: () -> Unit = {},
+    selectedValue: String,
+    onSelectionChanged: (String) -> Unit,
+    onCancelButtonClicked: () -> Unit,
+    onNextButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
-) {
-    var selectedValue by rememberSaveable { mutableStateOf("") }
-
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        Column(modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))) {
+)
+    {
+        Column(
+            modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
+        ) {
             options.forEach { item ->
-                Row(
-                    modifier = Modifier.selectable(
-                        selected = (selectedValue == item),
-                        onClick = {
-                            selectedValue = item
-                            onSelectionChanged(item)
-                        }
-                    ),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    RadioButton(
-                        selected = (selectedValue == item),
-                        onClick = {
-                            selectedValue = item
-                            onSelectionChanged(item)
-                        }
-                    )
-                    Text(item)
-                }
+                SelectableOptionRow(
+                item = item,
+                selectedValue = selectedValue,
+                onSelectionChanged = onSelectionChanged,
+                modifier = modifier
+                )
             }
             Divider(
                 thickness = dimensionResource(R.dimen.thickness_divider),
@@ -97,29 +141,42 @@ fun SelectOptionScreen(
                         bottom = dimensionResource(R.dimen.padding_medium)
                     )
             )
+            ActionButtonsRow(
+                onCancelButtonClicked = onCancelButtonClicked,
+                onNextButtonClicked = onNextButtonClicked,
+                isNextEnabled = selectedValue.isNotEmpty(),
+                selectedValue = selectedValue,
+                modifier = modifier
+            )
         }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(dimensionResource(R.dimen.padding_medium)),
-            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
-            verticalAlignment = Alignment.Bottom
-        ) {
-            OutlinedButton(
-                modifier = Modifier.weight(1f),
-                onClick = onCancelButtonClicked
-            ) {
-                Text(stringResource(R.string.cancel))
-            }
-            Button(
-                modifier = Modifier.weight(1f),
-                // the button is enabled when the user makes a selection
-                enabled = selectedValue.isNotEmpty(),
-                onClick = onNextButtonClicked
-            ) {
-                Text(stringResource(R.string.next))
-            }
-        }
+    }
+
+@Composable
+fun SelectOptionScreen(
+    subtotal: String,
+    options: List<String>,
+    onSelectionChanged: (String) -> Unit = {},
+    onCancelButtonClicked: () -> Unit = {},
+    onNextButtonClicked: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
+    var selectedValue by rememberSaveable { mutableStateOf("") }
+
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        SelectOptionContent(
+            subtotal = subtotal,
+            options = options,
+            selectedValue = selectedValue,
+            onSelectionChanged = { item ->
+                selectedValue = item
+                onSelectionChanged(item)
+            },
+            onCancelButtonClicked = onCancelButtonClicked,
+            onNextButtonClicked = onNextButtonClicked
+        )
     }
 }
 
