@@ -47,6 +47,58 @@ import com.example.cupcake.ui.theme.CupcakeTheme
  * next screen
  */
 @Composable
+fun StartOrderHeader() {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
+    ) {
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
+        Image(
+            painter = painterResource(R.drawable.cupcake),
+            contentDescription = null,
+            modifier = Modifier.width(300.dp)
+        )
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
+        Text(
+            text = stringResource(R.string.order_cupcakes),
+            style = MaterialTheme.typography.headlineSmall
+        )
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
+    }
+}
+
+@Composable
+fun QuantityOptionButtons(
+    quantityOptions: List<Pair<Int, Int>>,
+    onNextButtonClicked:(quantity: Int)-> Unit
+){
+    quantityOptions.forEach { (stringRes, optionValue) ->
+        SelectQuantityButton(
+            labelResourceId = stringRes,
+            onClick = {onNextButtonClicked(optionValue)}
+        )
+    }
+}
+
+@Composable
+fun QuantityOptionsList(
+    quantityOptions: List<Pair<Int, Int>>,
+    onNextButtonClicked:(quantity: Int)-> Unit,
+    modifier: Modifier = Modifier
+    ) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(
+            dimensionResource(id = R.dimen.padding_medium)
+        )
+    ) {
+        QuantityOptionButtons(quantityOptions, onNextButtonClicked)
+    }
+}
+
+@Composable
 fun StartOrderScreen(
     quantityOptions: List<Pair<Int, Int>>,
     onNextButtonClicked:(quantity: Int)-> Unit,
@@ -56,38 +108,12 @@ fun StartOrderScreen(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
-        ) {
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
-            Image(
-                painter = painterResource(R.drawable.cupcake),
-                contentDescription = null,
-                modifier = Modifier.width(300.dp)
-            )
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
-            Text(
-                text = stringResource(R.string.order_cupcakes),
-                style = MaterialTheme.typography.headlineSmall
-            )
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
-        }
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(
-                dimensionResource(id = R.dimen.padding_medium)
-            )
-        ) {
-            quantityOptions.forEach { (stringRes, optionValue) ->
-                SelectQuantityButton(
-                    labelResourceId = stringRes,
-                    onClick = {onNextButtonClicked(optionValue)}
-                )
-            }
-        }
+        StartOrderHeader()
+        QuantityOptionsList(
+            quantityOptions = quantityOptions,
+            onNextButtonClicked = onNextButtonClicked,
+            modifier = modifier
+        )
     }
 }
 
