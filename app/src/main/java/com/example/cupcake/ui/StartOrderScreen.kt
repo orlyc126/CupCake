@@ -96,7 +96,7 @@ fun StartOrderScreen(
  * and triggers [onClick] lambda when this composable is clicked
  */
 @Composable
-fun SelectQuantityButton(
+private fun SelectQuantityButton(
     @StringRes labelResourceId: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -111,7 +111,7 @@ fun SelectQuantityButton(
 
 @Preview
 @Composable
-fun StartOrderPreview() {
+private fun StartOrderPreview() {
     CupcakeTheme {
         StartOrderScreen(
             quantityOptions = DataSource.quantityOptions,

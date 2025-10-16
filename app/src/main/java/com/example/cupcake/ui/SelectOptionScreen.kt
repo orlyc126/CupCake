@@ -125,7 +125,7 @@ fun SelectOptionScreen(
 
 @Preview
 @Composable
-fun SelectOptionPreview() {
+private fun SelectOptionPreview() {
     CupcakeTheme {
         SelectOptionScreen(
             subtotal = "299.99",
