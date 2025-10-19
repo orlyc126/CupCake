@@ -141,7 +141,6 @@ fun OrderSummaryDetails(
     }
 }
 
-//////////////////////////////////////
 @Composable
 fun OrderSummaryButtons(
     newOrder: String,

@@ -39,6 +39,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.cupcake.R
 import com.example.cupcake.data.DataSource
+import com.example.cupcake.data.QuantityOption
 import com.example.cupcake.ui.theme.CupcakeTheme
 
 /**
@@ -70,7 +71,7 @@ fun StartOrderHeader() {
 
 @Composable
 fun QuantityOptionButtons(
-    quantityOptions: List<Pair<Int, Int>>,
+    quantityOptions: List<QuantityOption>,
     onNextButtonClicked:(quantity: Int)-> Unit
 ){
     quantityOptions.forEach { (stringRes, optionValue) ->
@@ -83,7 +84,7 @@ fun QuantityOptionButtons(
 
 @Composable
 fun QuantityOptionsList(
-    quantityOptions: List<Pair<Int, Int>>,
+    quantityOptions: List<QuantityOption>,
     onNextButtonClicked:(quantity: Int)-> Unit,
     modifier: Modifier = Modifier
     ) {
@@ -100,7 +101,7 @@ fun QuantityOptionsList(
 
 @Composable
 fun StartOrderScreen(
-    quantityOptions: List<Pair<Int, Int>>,
+    quantityOptions: List<QuantityOption>,
     onNextButtonClicked:(quantity: Int)-> Unit,
     modifier: Modifier = Modifier
 ) {
