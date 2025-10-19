@@ -42,11 +42,6 @@ import com.example.cupcake.data.DataSource
 import com.example.cupcake.data.QuantityOption
 import com.example.cupcake.ui.theme.CupcakeTheme
 
-/**
- * Composable that allows the user to select the desired cupcake quantity and expects
- * [onNextButtonClicked] lambda that expects the selected quantity and triggers the navigation to
- * next screen
- */
 @Composable
 fun StartOrderHeader() {
     Column(
@@ -69,6 +64,11 @@ fun StartOrderHeader() {
     }
 }
 
+/**
+ * Composable that allows the user to select the desired cupcake quantity and expects
+ * [onNextButtonClicked] lambda that expects the selected quantity and triggers the navigation to
+ * next screen
+ */
 @Composable
 fun QuantityOptionButtons(
     quantityOptions: List<QuantityOption>,
@@ -86,7 +86,6 @@ fun QuantityOptionButtons(
 fun QuantityOptionsList(
     quantityOptions: List<QuantityOption>,
     onNextButtonClicked:(quantity: Int)-> Unit,
-    modifier: Modifier = Modifier
     ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -113,7 +112,6 @@ fun StartOrderScreen(
         QuantityOptionsList(
             quantityOptions = quantityOptions,
             onNextButtonClicked = onNextButtonClicked,
-            modifier = modifier
         )
     }
 }

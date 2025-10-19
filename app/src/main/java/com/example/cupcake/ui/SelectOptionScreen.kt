@@ -41,19 +41,11 @@ import com.example.cupcake.R
 import com.example.cupcake.ui.components.FormattedPriceLabel
 import com.example.cupcake.ui.theme.CupcakeTheme
 
-/**
- * Composable that displays the list of items as [RadioButton] options,
- * [onSelectionChanged] lambda that notifies the parent composable when a new value is selected,
- * [onCancelButtonClicked] lambda that cancels the order when user clicks cancel and
- * [onNextButtonClicked] lambda that triggers the navigation to next screen
- */
 @Composable
 fun ActionButtonsRow(
     onCancelButtonClicked: () -> Unit,
     onNextButtonClicked: () -> Unit,
-    isNextEnabled: Boolean,
     selectedValue: String,
-    modifier: Modifier = Modifier
 ){
     Row(
         modifier = Modifier
@@ -84,7 +76,6 @@ fun SelectableOptionRow(
     item: String,
     selectedValue: String,
     onSelectionChanged: (String) -> Unit,
-    modifier: Modifier = Modifier
 ){
     Row(
         modifier = Modifier.selectable(
@@ -105,7 +96,12 @@ fun SelectableOptionRow(
     }
 }
 
-
+/**
+ * Composable that displays the list of items as [RadioButton] options,
+ * [onSelectionChanged] lambda that notifies the parent composable when a new value is selected,
+ * [onCancelButtonClicked] lambda that cancels the order when user clicks cancel and
+ * [onNextButtonClicked] lambda that triggers the navigation to next screen
+ */
 @Composable
 fun SelectOptionContent(
     subtotal: String,
@@ -114,7 +110,6 @@ fun SelectOptionContent(
     onSelectionChanged: (String) -> Unit,
     onCancelButtonClicked: () -> Unit,
     onNextButtonClicked: () -> Unit,
-    modifier: Modifier = Modifier
 )
     {
         Column(
@@ -125,7 +120,6 @@ fun SelectOptionContent(
                 item = item,
                 selectedValue = selectedValue,
                 onSelectionChanged = onSelectionChanged,
-                modifier = modifier
                 )
             }
             Divider(
@@ -144,9 +138,7 @@ fun SelectOptionContent(
             ActionButtonsRow(
                 onCancelButtonClicked = onCancelButtonClicked,
                 onNextButtonClicked = onNextButtonClicked,
-                isNextEnabled = selectedValue.isNotEmpty(),
                 selectedValue = selectedValue,
-                modifier = modifier
             )
         }
     }
@@ -155,10 +147,10 @@ fun SelectOptionContent(
 fun SelectOptionScreen(
     subtotal: String,
     options: List<String>,
+    modifier: Modifier = Modifier,
     onSelectionChanged: (String) -> Unit = {},
     onCancelButtonClicked: () -> Unit = {},
     onNextButtonClicked: () -> Unit = {},
-    modifier: Modifier = Modifier
 ) {
     var selectedValue by rememberSaveable { mutableStateOf("") }
 
