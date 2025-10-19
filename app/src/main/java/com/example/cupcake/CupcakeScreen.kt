@@ -132,7 +132,7 @@ fun CupcakeApp(
                         cancelOrderAndNavigateToStart(viewModel, navController)
                     },
                     options = DataSource.flavors.map { id -> stringResource(id) },
-                    onSelectionChanged = { viewModel::setFlavor },
+                    onSelectionChanged =  viewModel::setFlavor ,
                     modifier = Modifier.fillMaxHeight()
                 )
             }

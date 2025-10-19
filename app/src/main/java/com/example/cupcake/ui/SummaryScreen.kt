@@ -110,7 +110,10 @@ fun OrderSummaryContent(
             newOrder = newOrder,
             orderSummary = orderSummary,
             onSendButtonClicked = onSendButtonClicked,
-            onCancelButtonClicked = onCancelButtonClicked
+            onCancelButtonClicked = onCancelButtonClicked,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(R.dimen.padding_medium))
         )
     }
 }
@@ -142,7 +145,8 @@ fun OrderSummaryButtons(
     newOrder: String,
     orderSummary: String,
     onSendButtonClicked: (String, String) -> Unit,
-    onCancelButtonClicked: () -> Unit
+    onCancelButtonClicked: () -> Unit,
+    modifier: Modifier = Modifier
 )
 {
     Row(
