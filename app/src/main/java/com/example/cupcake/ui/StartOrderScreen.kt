@@ -39,7 +39,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.cupcake.R
 import com.example.cupcake.data.DataSource
+import com.example.cupcake.data.QuantityOption
 import com.example.cupcake.ui.theme.CupcakeTheme
+
+@Composable
+fun StartOrderHeader() {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
+    ) {
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
+        Image(
+            painter = painterResource(R.drawable.cupcake),
+            contentDescription = null,
+            modifier = Modifier.width(300.dp)
+        )
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
+        Text(
+            text = stringResource(R.string.order_cupcakes),
+            style = MaterialTheme.typography.headlineSmall
+        )
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
+    }
+}
 
 /**
  * Composable that allows the user to select the desired cupcake quantity and expects
@@ -47,8 +70,37 @@ import com.example.cupcake.ui.theme.CupcakeTheme
  * next screen
  */
 @Composable
+fun QuantityOptionButtons(
+    quantityOptions: List<QuantityOption>,
+    onNextButtonClicked:(quantity: Int)-> Unit
+){
+    quantityOptions.forEach { (stringRes, optionValue) ->
+        SelectQuantityButton(
+            labelResourceId = stringRes,
+            onClick = {onNextButtonClicked(optionValue)}
+        )
+    }
+}
+
+@Composable
+fun QuantityOptionsList(
+    quantityOptions: List<QuantityOption>,
+    onNextButtonClicked:(quantity: Int)-> Unit,
+    ) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(
+            dimensionResource(id = R.dimen.padding_medium)
+        )
+    ) {
+        QuantityOptionButtons(quantityOptions, onNextButtonClicked)
+    }
+}
+
+@Composable
 fun StartOrderScreen(
-    quantityOptions: List<Pair<Int, Int>>,
+    quantityOptions: List<QuantityOption>,
     onNextButtonClicked:(quantity: Int)-> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -56,38 +108,11 @@ fun StartOrderScreen(
         modifier = modifier,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
-        ) {
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
-            Image(
-                painter = painterResource(R.drawable.cupcake),
-                contentDescription = null,
-                modifier = Modifier.width(300.dp)
-            )
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
-            Text(
-                text = stringResource(R.string.order_cupcakes),
-                style = MaterialTheme.typography.headlineSmall
-            )
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
-        }
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(
-                dimensionResource(id = R.dimen.padding_medium)
-            )
-        ) {
-            quantityOptions.forEach { (stringRes, optionValue) ->
-                SelectQuantityButton(
-                    labelResourceId = stringRes,
-                    onClick = {onNextButtonClicked(optionValue)}
-                )
-            }
-        }
+        StartOrderHeader()
+        QuantityOptionsList(
+            quantityOptions = quantityOptions,
+            onNextButtonClicked = onNextButtonClicked,
+        )
     }
 }
 
@@ -96,7 +121,7 @@ fun StartOrderScreen(
  * and triggers [onClick] lambda when this composable is clicked
  */
 @Composable
-fun SelectQuantityButton(
+private fun SelectQuantityButton(
     @StringRes labelResourceId: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -111,7 +136,7 @@ fun SelectQuantityButton(
 
 @Preview
 @Composable
-fun StartOrderPreview() {
+private fun StartOrderPreview() {
     CupcakeTheme {
         StartOrderScreen(
             quantityOptions = DataSource.quantityOptions,

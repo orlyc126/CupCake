@@ -41,6 +41,61 @@ import com.example.cupcake.R
 import com.example.cupcake.ui.components.FormattedPriceLabel
 import com.example.cupcake.ui.theme.CupcakeTheme
 
+@Composable
+fun ActionButtonsRow(
+    onCancelButtonClicked: () -> Unit,
+    onNextButtonClicked: () -> Unit,
+    selectedValue: String,
+){
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(dimensionResource(R.dimen.padding_medium)),
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
+        verticalAlignment = Alignment.Bottom
+    ) {
+        OutlinedButton(
+            modifier = Modifier.weight(1f),
+            onClick = onCancelButtonClicked
+        ) {
+            Text(stringResource(R.string.cancel))
+        }
+        Button(
+            modifier = Modifier.weight(1f),
+            // the button is enabled when the user makes a selection
+            enabled = selectedValue.isNotEmpty(),
+            onClick = onNextButtonClicked
+        ) {
+            Text(stringResource(R.string.next))
+        }
+    }
+}
+
+@Composable
+fun SelectableOptionRow(
+    item: String,
+    selectedValue: String,
+    onSelectionChanged: (String) -> Unit,
+){
+    Row(
+        modifier = Modifier.selectable(
+            selected = (selectedValue == item),
+            onClick = {
+                onSelectionChanged(item)
+            }
+        ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(
+            selected = (selectedValue == item),
+            onClick = {
+                onSelectionChanged(item)
+            }
+        )
+        Text(item)
+    }
+}
+
 /**
  * Composable that displays the list of items as [RadioButton] options,
  * [onSelectionChanged] lambda that notifies the parent composable when a new value is selected,
@@ -48,41 +103,24 @@ import com.example.cupcake.ui.theme.CupcakeTheme
  * [onNextButtonClicked] lambda that triggers the navigation to next screen
  */
 @Composable
-fun SelectOptionScreen(
+fun SelectOptionContent(
     subtotal: String,
     options: List<String>,
-    onSelectionChanged: (String) -> Unit = {},
-    onCancelButtonClicked: () -> Unit = {},
-    onNextButtonClicked: () -> Unit = {},
-    modifier: Modifier = Modifier
-) {
-    var selectedValue by rememberSaveable { mutableStateOf("") }
-
-    Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        Column(modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))) {
+    selectedValue: String,
+    onSelectionChanged: (String) -> Unit,
+    onCancelButtonClicked: () -> Unit,
+    onNextButtonClicked: () -> Unit,
+)
+    {
+        Column(
+            modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
+        ) {
             options.forEach { item ->
-                Row(
-                    modifier = Modifier.selectable(
-                        selected = (selectedValue == item),
-                        onClick = {
-                            selectedValue = item
-                            onSelectionChanged(item)
-                        }
-                    ),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    RadioButton(
-                        selected = (selectedValue == item),
-                        onClick = {
-                            selectedValue = item
-                            onSelectionChanged(item)
-                        }
-                    )
-                    Text(item)
-                }
+                SelectableOptionRow(
+                item = item,
+                selectedValue = selectedValue,
+                onSelectionChanged = onSelectionChanged,
+                )
             }
             Divider(
                 thickness = dimensionResource(R.dimen.thickness_divider),
@@ -97,35 +135,46 @@ fun SelectOptionScreen(
                         bottom = dimensionResource(R.dimen.padding_medium)
                     )
             )
+            ActionButtonsRow(
+                onCancelButtonClicked = onCancelButtonClicked,
+                onNextButtonClicked = onNextButtonClicked,
+                selectedValue = selectedValue,
+            )
         }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(dimensionResource(R.dimen.padding_medium)),
-            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium)),
-            verticalAlignment = Alignment.Bottom
-        ) {
-            OutlinedButton(
-                modifier = Modifier.weight(1f),
-                onClick = onCancelButtonClicked
-            ) {
-                Text(stringResource(R.string.cancel))
-            }
-            Button(
-                modifier = Modifier.weight(1f),
-                // the button is enabled when the user makes a selection
-                enabled = selectedValue.isNotEmpty(),
-                onClick = onNextButtonClicked
-            ) {
-                Text(stringResource(R.string.next))
-            }
-        }
+    }
+
+@Composable
+fun SelectOptionScreen(
+    subtotal: String,
+    options: List<String>,
+    modifier: Modifier = Modifier,
+    onSelectionChanged: (String) -> Unit = {},
+    onCancelButtonClicked: () -> Unit = {},
+    onNextButtonClicked: () -> Unit = {},
+) {
+    var selectedValue by rememberSaveable { mutableStateOf("") }
+
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        SelectOptionContent(
+            subtotal = subtotal,
+            options = options,
+            selectedValue = selectedValue,
+            onSelectionChanged = { item ->
+                selectedValue = item
+                onSelectionChanged(item)
+            },
+            onCancelButtonClicked = onCancelButtonClicked,
+            onNextButtonClicked = onNextButtonClicked
+        )
     }
 }
 
 @Preview
 @Composable
-fun SelectOptionPreview() {
+private fun SelectOptionPreview() {
     CupcakeTheme {
         SelectOptionScreen(
             subtotal = "299.99",

@@ -60,7 +60,7 @@ enum class CupcakeScreen(@StringRes val title: Int) {
 }
 
 @Composable
-fun CupcakeAppBar(
+private fun CupcakeAppBar(
     currentScreen: CupcakeScreen,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
@@ -125,7 +125,6 @@ fun CupcakeApp(
                 )
             }
             composable(route = CupcakeScreen.Flavor.name) {
-                val context = LocalContext.current
                 SelectOptionScreen(
                     subtotal = uiState.price,
                     onNextButtonClicked = { navController.navigate(CupcakeScreen.Pickup.name) },
@@ -133,7 +132,7 @@ fun CupcakeApp(
                         cancelOrderAndNavigateToStart(viewModel, navController)
                     },
                     options = DataSource.flavors.map { id -> stringResource(id) },
-                    onSelectionChanged = { viewModel::setFlavor },
+                    onSelectionChanged =  viewModel::setFlavor ,
                     modifier = Modifier.fillMaxHeight()
                 )
             }
